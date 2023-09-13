@@ -22,7 +22,7 @@ const dbConection = async () => {
 
 const expressListener = async () => {
     try {
-        app.use(cors())
+        app.use(cors({origin: '*'}))
         app.use(morgan('dev'))
         app.use(express.json())
         app.use('/api', router)
