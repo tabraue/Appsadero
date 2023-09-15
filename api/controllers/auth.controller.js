@@ -6,10 +6,13 @@ const jwt = require('jsonwebtoken');
 
 const signUp = async (req, res) => {
     try {           
-        const checkUser = await User.findOne({email: req.body.email}) 
+        const checkUser = await User.findOne({where: {email: req.body.email}}) 
+
+        console.log(checkUser)
         if(checkUser) return res.status(400).send("Email already exists.")
         
-        const nick = await User.findOne({nickname: req.body.nickname})
+        const nick = await User.findOne({where: {nickname: req.body.nickname}})
+        console.log(nick)
         if(nick) return res.status(400).send("Nickname not available")  
 
         req.body.password = bcrypt.hashSync(req.body.password, 10);
@@ -22,7 +25,7 @@ const signUp = async (req, res) => {
 
         console.log("Sign up successfully");
 
-        return res.status(200).json({token});
+        return res.status(200).json({ message: "Sign up successfully" });
     } catch (error) {
         console.log(error);
         return res.status(500).send(">> Oops something went wrong, we could not sign you up.")
