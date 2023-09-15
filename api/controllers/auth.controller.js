@@ -5,15 +5,23 @@ const jwt = require('jsonwebtoken');
 
 
 const signUp = async (req, res) => {
-    try {            
-        req.body.password = bcrypt.hashSync(req.body.password, 10);
-        const user = await User.create(req.body)
+    try {           
+        const checkUser = await User.findOne({email: req.body.email}) 
+        if(checkUser) return res.status(400).send("Email already exists.")
+        
+        const nick = await User.findOne({nickname: req.body.nickname})
+        if(nick) return res.status(400).send("Nickname not available")  
 
+        req.body.password = bcrypt.hashSync(req.body.password, 10);
+
+        const user = await User.create(req.body)
         //REMEMBER CHANGE EXPIRATES SESSION 
         const token = jwt.sign({email: user.email}, process.env.JWT_SECRET, {expiresIn: '1y'})
 
-        //delete user.password;
-        console.log("Logged in successfully");
+        delete user.password;
+
+        console.log("Sign up successfully");
+
         return res.status(200).json({token});
     } catch (error) {
         console.log(error);
@@ -41,11 +49,11 @@ const logIn = async(req, res) => {
                 }
                 return res.status(400).send(">> Oops something went wrong, user or password incorrect.")
             })
-        }else{
-            return res.status(400).send(">> Oops something went wrong, user or password incorrect.")
-        }
+        }/* else{
+            return res.status(401).send(">> Oops something went wrong, user or password incorrect.")
+        } */
     }catch(error) {
-        return res.status(400).send(">> Oops something went wrong, user or password incorrect.")
+        return res.status(402).send(">> Oops something went wrong, user or password incorrect.")
     }
 }
 
