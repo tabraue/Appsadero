@@ -11,7 +11,7 @@ const Asadero = sequelize.define("asadero", {
     allowNull: false,
   },
   date_time: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
     validate: {
       isDate: true,
@@ -22,15 +22,11 @@ const Asadero = sequelize.define("asadero", {
     allowNull: false,
   },
   price: {
-    type: DataTypes.DECIMAL,
-    allowNull: true,
-  },
-  comments: {
-    type: DataTypes.TEXT,
+    type: DataTypes.DOUBLE,
     allowNull: true,
   },
   confirmation_date: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
     validate: {
       isDate: true,
@@ -40,6 +36,11 @@ const Asadero = sequelize.define("asadero", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  isOpen: {
+    type: DataTypes.BOOLEAN,
+    allowNull:false,
+    defaultValue: true
+  }
 });
 
 module.exports = Asadero;
